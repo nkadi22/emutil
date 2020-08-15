@@ -146,12 +146,14 @@ int main(int argc, char *argv[])
   {
     /*display menu*/
     printf("**********Euro Millions utility***********\n");
+    printf("0. Exit\n");
     printf("1. Add new key\n");
     printf("2. Check for duplicates keys on dataset\n");
     printf("3. Generate new key\n");
     printf("4. Generate non-existent key\n");
     printf("5. Check if a key has ever lead to a jackpot\n");
-    printf("6. Exit\n");
+    printf("6. Probabilities\n");
+    printf("7. Generate non-existent key (with odd-even requirement)\n");
     printf("******************************************\n");
 
     int option;
@@ -249,10 +251,10 @@ int main(int argc, char *argv[])
       }
       case 4:
       {
-      	em_key *key = facade.generate_non_existent_key();
-      	if (key)
-      	{
-      	  fprintf(stdout, "%s%u %s%u %s%u %s%u %s%u * %s%u %s%u\n",
+        em_key *key = facade.generate_non_existent_key();
+        if (key)
+        {
+          fprintf(stdout, "%s%u %s%u %s%u %s%u %s%u * %s%u %s%u\n",
             (key->main_numbers[0]<10) ? " " : "",
             key->main_numbers[0],
             (key->main_numbers[1]<10) ? " " : "",
@@ -268,11 +270,11 @@ int main(int argc, char *argv[])
             (key->stars[1]<10) ? " " : "",
             key->stars[1]);
           free(key);
-      	}
-      	else
-      	{
-      	  fprintf(stdout, "unable to find a non-existent key. try again :)\n" );
-      	}
+        }
+        else
+        {
+          fprintf(stdout, "unable to find a non-existent key. try again :)\n" );
+        }
         break;
       }
       case 5:
@@ -337,6 +339,79 @@ int main(int argc, char *argv[])
         break;
       }
       case 6:
+      {
+        float three_two = facade.percentage_odd_even(3, 2);
+        float two_three = facade.percentage_odd_even(2, 3);
+        float one_four =  facade.percentage_odd_even(1, 4);
+        float four_one =  facade.percentage_odd_even(4, 1);
+        float five_zero = facade.percentage_odd_even(5, 0);
+        float zero_five = facade.percentage_odd_even(0, 5);
+
+        printf("odd-even\n");
+        printf("...3-odd-2-even:  %.16f%%\n", three_two);
+        printf("...3-even-2-odd:  %.16f%%\n", two_three);
+        printf("...1-odd-4-even:  %.16f%%\n", one_four);
+        printf("...1-even-4-odd:  %.16f%%\n", four_one);
+        printf("...5-odd-0-even:   %.16f%%\n", five_zero);
+        printf("...5-even-0-odd:   %.16f%%\n", zero_five);
+        printf("..........total: %.16f%%\n", three_two + two_three + one_four + four_one + five_zero + zero_five);
+
+        three_two = facade.percentage_low_high(3, 2);
+        two_three = facade.percentage_low_high(2, 3);
+        one_four =  facade.percentage_low_high(1, 4);
+        four_one =  facade.percentage_low_high(4, 1);
+        five_zero = facade.percentage_low_high(5, 0);
+        zero_five = facade.percentage_low_high(0, 5);
+
+        printf("\nlow(1..25)-high(26..50)\n");
+        printf("...3-low-2-high:  %.16f%%\n", three_two);
+        printf("...3-high-2-low:  %.16f%%\n", two_three);
+        printf("...1-low-4-high:  %.16f%%\n", one_four);
+        printf("...1-high-4-low:  %.16f%%\n", four_one);
+        printf("...5-low-0-high:   %.16f%%\n", five_zero);
+        printf("...5-high-0-low:   %.16f%%\n", zero_five);
+        printf("..........total: %.16f%%\n\n", three_two + two_three + one_four + four_one + five_zero + zero_five);
+        break;
+      }
+      case 7:
+      {
+        while ((getchar()) != '\n');
+        char buffer[40];
+        int odd, even;
+        printf("odd-even requirement (dash-separated):\n");
+        //scanf("%s", new_key_str);
+        if (fgets(buffer, 40, stdin) != nullptr)
+        {
+          int count = sscanf(buffer, "%d-%d", &odd, &even);
+          printf("count: %d\n", count);
+          em_key *key = facade.generate_non_existent_key(true, odd, even);
+          if (key)
+          {
+            fprintf(stdout, "%s%u %s%u %s%u %s%u %s%u * %s%u %s%u\n",
+              (key->main_numbers[0]<10) ? " " : "",
+              key->main_numbers[0],
+              (key->main_numbers[1]<10) ? " " : "",
+              key->main_numbers[1],
+              (key->main_numbers[2]<10) ? " " : "",
+              key->main_numbers[2],
+              (key->main_numbers[3]<10) ? " " : "",
+              key->main_numbers[3],
+              (key->main_numbers[4]<10) ? " " : "",
+              key->main_numbers[4],
+              (key->stars[0]<10) ? " " : "",
+              key->stars[0],
+              (key->stars[1]<10) ? " " : "",
+              key->stars[1]);
+            free(key);
+          }
+          else
+          {
+            fprintf(stdout, "unable to find a non-existent key. try again :)\n" );
+          }
+        }
+        break;
+      }
+      case 0:
         doexit = true;
         break;
       default:

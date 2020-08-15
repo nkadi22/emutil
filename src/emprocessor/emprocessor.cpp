@@ -404,7 +404,7 @@ em_key *emprocessor::generate_key()
   return key;
 }
 
-em_key *emprocessor::generate_non_existent_key()
+em_key *emprocessor::generate_non_existent_key(bool odd_even, int qte_odd, int qte_even)
 {
   constexpr short NUM_TRIES = 100;
 
@@ -433,10 +433,109 @@ em_key *emprocessor::generate_non_existent_key()
   	}
   	else
   	{
-  	  return key;
+      if (!odd_even)
+      {
+        return key;
+      }
+      else if ((qte_odd+qte_even)==5)
+      {
+        int odd=0, even=0;
+        for (int i = 0; i < 5; ++i)
+        {
+          if (key->main_numbers[i]%2 != 0)
+          {
+            ++odd;
+          }
+          else
+          {
+            ++even;
+          }
+        }
+
+        if (odd==qte_odd && even==qte_even)
+        {
+          return key;
+        }
+        else
+        {
+          printf("generated key does not respect odd-even relationship, generating another key...\n");
+        }
+      }
   	}
   }
   return nullptr;
+}
+
+float emprocessor::percentage_odd_even(int qte_odd, int qte_even)
+{
+  int count = 0;
+  int odd=0, even=0;
+
+  if ((qte_odd+qte_even) != 5)
+  {
+    return 0.0;
+  }
+
+  for (const auto &each : all_keys)
+  {
+    for (int i = 0; i < 5; ++i)
+    {
+      if (each->main_numbers[i]%2 != 0)
+      {
+        ++odd;
+      }
+      else
+      {
+        ++even;
+      }
+    }
+
+    if (odd==qte_odd && even==qte_even)
+    {
+      ++count;
+    }
+
+    odd = 0;
+    even = 0;
+  }
+
+  return ((float)count/(float)all_keys.size()) * 100.0;
+}
+
+float emprocessor::percentage_low_high(int qte_low, int qte_high)
+{
+  int count = 0;
+  int low=0, high=0;
+
+  if ((qte_low+qte_high) != 5)
+  {
+    return 0.0;
+  }
+
+  for (const auto &each : all_keys)
+  {
+    for (int i = 0; i < 5; ++i)
+    {
+      if (each->main_numbers[i] < 26)
+      {
+        ++low;
+      }
+      else
+      {
+        ++high;
+      }
+    }
+
+    if (low==qte_low && high==qte_high)
+    {
+      ++count;
+    }
+
+    low = 0;
+    high = 0;
+  }
+
+  return ((float)count/(float)all_keys.size()) * 100.0;
 }
 
 emprocessor::~emprocessor()

@@ -111,8 +111,10 @@ class emprocessor
     std::vector<em_key *> check_for_duplicates_ever();
     static short generate_random(short lower, short upper);
     static em_key *generate_key();
-    em_key *generate_non_existent_key();
+    em_key *generate_non_existent_key(bool odd_even = false, int qte_odd = 0, int qte_even = 0);
     em_key *key_exists(const em_key &key);
+    float percentage_odd_even(int qte_odd, int qte_even);
+    float percentage_low_high(int qte_low, int qte_high);
     ~emprocessor();
 
   private:

@@ -538,6 +538,71 @@ float emprocessor::percentage_low_high(int qte_low, int qte_high)
   return ((float)count/(float)all_keys.size()) * 100.0;
 }
 
+float emprocessor::percentage_consecutive(int qte_cons)
+{
+  int count = 0;
+  if (qte_cons>5 || qte_cons<2)
+  {
+    return 0.0;
+  }
+
+  if (qte_cons==2)
+  {
+    for (const auto &each : all_keys)
+    {
+      if ( each->main_numbers[0]+1==each->main_numbers[1] ||
+           each->main_numbers[1]+1==each->main_numbers[2] ||
+           each->main_numbers[2]+1==each->main_numbers[3] ||
+           each->main_numbers[3]+1==each->main_numbers[4]    )
+      {
+        ++count;
+      }
+    }
+  }
+  else if (qte_cons==3)
+  {
+    for (const auto &each : all_keys)
+    {
+      if ( (each->main_numbers[0]+1==each->main_numbers[1] && each->main_numbers[1]+1==each->main_numbers[2]) ||
+           (each->main_numbers[1]+1==each->main_numbers[2] && each->main_numbers[2]+1==each->main_numbers[3]) ||
+           (each->main_numbers[2]+1==each->main_numbers[3] && each->main_numbers[3]+1==each->main_numbers[4])    )
+      {
+        ++count;
+      }
+    }
+  }
+  else if (qte_cons==4)
+  {
+    for (const auto &each : all_keys)
+    {
+      if ( (each->main_numbers[0]+1==each->main_numbers[1] && 
+            each->main_numbers[1]+1==each->main_numbers[2] &&
+            each->main_numbers[2]+1==each->main_numbers[3]    ) ||
+           (each->main_numbers[1]+1==each->main_numbers[2] && 
+            each->main_numbers[2]+1==each->main_numbers[3] &&
+            each->main_numbers[3]+1==each->main_numbers[4]    )    ) 
+      {
+        ++count;
+      }
+    }
+  }
+  else if (qte_cons==5)
+  {
+    for (const auto &each : all_keys)
+    {
+      if (each->main_numbers[0]+1==each->main_numbers[1] && 
+          each->main_numbers[1]+1==each->main_numbers[2] &&
+          each->main_numbers[2]+1==each->main_numbers[3] &&
+          each->main_numbers[3]+1==each->main_numbers[4]    ) 
+      {
+        ++count;
+      }
+    }
+  }
+
+  return ((float)count/(float)all_keys.size()) * 100.0;
+}
+
 emprocessor::~emprocessor()
 {
   for (auto &value : all_keys)

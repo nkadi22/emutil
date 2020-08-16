@@ -370,7 +370,21 @@ int main(int argc, char *argv[])
         printf("...1-high-4-low:  %.16f%%\n", four_one);
         printf("...5-low-0-high:   %.16f%%\n", five_zero);
         printf("...5-high-0-low:   %.16f%%\n", zero_five);
-        printf("..........total: %.16f%%\n\n", three_two + two_three + one_four + four_one + five_zero + zero_five);
+        printf("..........total: %.16f%%\n", three_two + two_three + one_four + four_one + five_zero + zero_five);
+
+        float two_cons =   facade.percentage_consecutive(2);
+        float three_cons = facade.percentage_consecutive(3);
+        float four_cons =  facade.percentage_consecutive(4);
+        float five_cons =  facade.percentage_consecutive(5);
+
+        printf("\nconsecutive\n");
+        printf("...0 consecutive:  %.16f%%\n", 100.0-two_cons-three_cons-four_cons-five_cons);
+        printf("...2 consecutive:  %.16f%%\n", two_cons);
+        printf("...3 consecutive:   %.16f%%\n", three_cons);
+        printf("...4 consecutive:   %.16f%%\n", four_cons);
+        printf("...5 consecutive:   %.16f%%\n", five_cons);
+        printf("...........total: %.16f%%\n\n", 100.0);
+
         break;
       }
       case 7:

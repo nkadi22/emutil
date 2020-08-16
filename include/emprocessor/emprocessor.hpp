@@ -115,6 +115,7 @@ class emprocessor
     em_key *key_exists(const em_key &key);
     float percentage_odd_even(int qte_odd, int qte_even);
     float percentage_low_high(int qte_low, int qte_high);
+    float percentage_consecutive(int qte_cons);
     ~emprocessor();
 
   private:
